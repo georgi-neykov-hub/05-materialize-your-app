@@ -1,4 +1,6 @@
 <resources>
+
+    <integer name="list_column_count">3</integer>
     <!-- detail -->
     <bool name="detail_is_card">true</bool>
 
