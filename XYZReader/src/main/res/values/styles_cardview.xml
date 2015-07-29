@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CardView.Text">
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="CardView.Text.Title.Primary" parent="CardView.Text">
+        <item name="android:textSize">24sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="CardView.Text.Title.Secondary" parent="CardView.Text">
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+</resources>

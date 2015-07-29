@@ -3,6 +3,8 @@ package com.example.xyzreader.remote;
 import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,10 +22,10 @@ public class RemoteEndpointUtil {
     private RemoteEndpointUtil() {
     }
 
-    public static JSONArray fetchJsonArray() {
+    public static JSONArray fetchJsonArray(OkHttpClient client) {
         String itemsJson = null;
         try {
-            itemsJson = fetchPlainText(Config.BASE_URL);
+            itemsJson = fetchPlainText(client, Constants.BASE_URL);
         } catch (IOException e) {
             Log.e(TAG, "Error fetching items JSON", e);
             return null;
@@ -44,29 +46,17 @@ public class RemoteEndpointUtil {
         return null;
     }
 
-    static String fetchPlainText(URL url) throws IOException {
-        return new String(fetch(url), "UTF-8" );
+    static String fetchPlainText(OkHttpClient client, URL url) throws IOException {
+        return new String(fetch(client, url), "UTF-8" );
     }
 
-    static byte[] fetch(URL url) throws IOException {
-        InputStream in = null;
-
-        try {
-            OkHttpClient client = new OkHttpClient();
-            HttpURLConnection conn = client.open(url);
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            in = conn.getInputStream();
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = in.read(buffer)) > 0) {
-                out.write(buffer, 0, bytesRead);
-            }
-            return out.toByteArray();
-
-        } finally {
-            if (in != null) {
-                in.close();
-            }
-        }
+    static byte[] fetch(OkHttpClient client, URL url) throws IOException {
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+        Response response = client.newCall(request)
+                .execute();
+        return response.body().bytes();
     }
 }
