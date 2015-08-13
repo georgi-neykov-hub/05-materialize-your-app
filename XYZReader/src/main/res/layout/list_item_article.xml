@@ -20,7 +20,8 @@
             android:id="@+id/thumbnail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:widthToHeightRatio="1.5777"
+            android:scaleType="centerCrop"
+            app:widthToHeightRatio="1.0"
             tools:background="@drawable/photo_placeholder" />
 
         <include android:layout_width="match_parent"

@@ -60,18 +60,20 @@ public class ArticleListActivity extends AppCompatActivity implements LoaderMana
         configureRecycleView(savedInstanceState);
 
         getLoaderManager().initLoader(0, null, this);
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             refresh();
         }
     }
 
-    private void initializeViewReferences(){
+    private void initializeViewReferences() {
         mRecyclerView = (RecyclerView) findViewById(R.id.articleList);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
         mEmptyImageView = (ImageView) findViewById(R.id.emptyImage);
         mEmptyViewText = (TextView) findViewById(R.id.emptyText);
         mEmptyViewAction = (Button) findViewById(R.id.emptyButton);
         mEmptyView = findViewById(R.id.emptyView);
+
+        mSwipeRefreshLayout.setColorSchemeResources(ViewUtils.getThemeColorAccent(getTheme()));
     }
 
     private void setEventListeners() {
@@ -83,9 +85,9 @@ public class ArticleListActivity extends AppCompatActivity implements LoaderMana
         });
     }
 
-    private void configureRecycleView(Bundle savedInstanceState){
+    private void configureRecycleView(Bundle savedInstanceState) {
         RecyclerView.LayoutManager layoutManager = createLayoutManager();
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             layoutManager.onRestoreInstanceState(savedInstanceState.getParcelable(KEY_LAYOUT_MANAGER_STATE));
         }
         mRecyclerView.setLayoutManager(layoutManager);
@@ -93,7 +95,7 @@ public class ArticleListActivity extends AppCompatActivity implements LoaderMana
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private RecyclerView.LayoutManager createLayoutManager(){
+    private RecyclerView.LayoutManager createLayoutManager() {
         int columnCountNeeded = getResources().getInteger(R.integer.list_column_count);
         return new StaggeredGridLayoutManager(columnCountNeeded, StaggeredGridLayoutManager.VERTICAL);
     }
@@ -102,7 +104,7 @@ public class ArticleListActivity extends AppCompatActivity implements LoaderMana
         configureEmptyViewForNoItems();
         toggleEmptyView(false);
         startService(new Intent(this, UpdaterService.class));
-        getLoaderManager().restartLoader(0,null, this).forceLoad();
+        getLoaderManager().restartLoader(0, null, ArticleListActivity.this).forceLoad();
     }
 
     @Override
@@ -140,7 +142,7 @@ public class ArticleListActivity extends AppCompatActivity implements LoaderMana
                 updateRefreshingUI();
 
                 boolean connectionIsDown = intent.getBooleanExtra(UpdaterService.EXTRA_NO_INTERNET, false);
-                if(connectionIsDown){
+                if (connectionIsDown) {
                     Snackbar.make(
                             findViewById(R.id.coordinatorLayout),
                             R.string.message_no_internet,
@@ -149,11 +151,11 @@ public class ArticleListActivity extends AppCompatActivity implements LoaderMana
                 }
 
                 boolean errorOccurred = intent.getBooleanExtra(UpdaterService.EXTRA_ERROR_OCCURRED, false);
-                if (errorOccurred){
+                if (errorOccurred) {
                     configureEmptyViewForRefreshError();
+                } else {
+                    configureEmptyViewForNoItems();
                 }
-
-                toggleEmptyView(mAdapter.getItemCount() == 0);
             }
         }
     };
@@ -190,7 +192,7 @@ public class ArticleListActivity extends AppCompatActivity implements LoaderMana
             @DrawableRes int imageId,
             @StringRes int messageId,
             @StringRes int buttonTextId,
-            View.OnClickListener clickListener){
+            View.OnClickListener clickListener) {
         mEmptyImageView.setImageResource(imageId);
         mEmptyImageView.setVisibility(imageId != 0 ? View.VISIBLE : View.GONE);
         mEmptyViewText.setText(messageId);
@@ -198,9 +200,14 @@ public class ArticleListActivity extends AppCompatActivity implements LoaderMana
         mEmptyViewAction.setOnClickListener(clickListener);
     }
 
-    private void toggleEmptyView(boolean show){
-        int visibility = show? View.VISIBLE : View.INVISIBLE;
-        mEmptyView.setVisibility(visibility);
+    private void toggleEmptyView(boolean show) {
+        mEmptyView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+        mEmptyImageView.animate().cancel();
+        if (show) {
+            mEmptyImageView.animate().alpha(1.f);
+        } else {
+            mEmptyImageView.setAlpha(0f);
+        }
     }
 
     private void updateRefreshingUI() {

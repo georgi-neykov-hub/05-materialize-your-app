@@ -3,11 +3,11 @@ package com.example.xyzreader.ui;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.widget.ImageView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.example.xyzreader.R;
 
-public class AspectRatioImageView extends NetworkImageView {
+public class AspectRatioImageView extends ImageView {
     public static final float UNDEFINED_ASPECT_RATIO = 0.f;
 
     private float mAspectRatio = UNDEFINED_ASPECT_RATIO;
@@ -25,7 +25,6 @@ public class AspectRatioImageView extends NetworkImageView {
         if (attrs != null) {
             readAttributeValues(context, attrs, defStyle);
         }
-
     }
 
     private void readAttributeValues(Context context, AttributeSet attrs, int defStyleAttr) {

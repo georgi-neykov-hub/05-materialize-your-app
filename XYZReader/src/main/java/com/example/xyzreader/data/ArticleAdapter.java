@@ -98,11 +98,11 @@ public class ArticleAdapter extends CursorAdapter<ArticleAdapter.ViewHolder> {
             thumbnailView.setAspectRatio(cursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
         }
 
-        private void loadThumbnail(ImageView view, String imageUrl) {
+        private void loadThumbnail(AspectRatioImageView view, String imageUrl) {
             if (imageUrl != null) {
+                Picasso.with(view.getContext()).cancelRequest(view);
                 Picasso.with(view.getContext())
                         .load(imageUrl)
-                        .fit()
                         .into(view);
             }
         }

@@ -4,14 +4,15 @@ import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.ShareCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -63,7 +65,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements LoaderMa
 
         mSubtitleTextView = (TextView) findViewById(R.id.article_byline);
         mBodyTextView = (TextView) findViewById(R.id.article_body);
-        mImageView = (ImageView) findViewById(R.id.article_image );
+        mImageView = (ImageView) findViewById(R.id.article_image);
 
         findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +85,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        if(!isFinishing()) {
+        if (!isFinishing()) {
             cursor.moveToFirst();
             bindViews(cursor);
         }
@@ -93,23 +95,46 @@ public class ArticleDetailActivity extends AppCompatActivity implements LoaderMa
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
     }
 
-    private void addImageParallax(){
-    }
-
     private void bindViews(Cursor cursor) {
         mToolbarLayout.setTitle(cursor.getString(ArticleLoader.Query.TITLE));
         mSubtitleTextView.setText(Html.fromHtml(
                 DateUtils.getRelativeTimeSpanString(
                         cursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
                         System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-                        DateUtils.FORMAT_ABBREV_ALL).toString()
+                        DateUtils.FORMAT_ABBREV_ALL).toString() + " by "
                         + cursor.getString(ArticleLoader.Query.AUTHOR)));
         mBodyTextView.setText(Html.fromHtml(cursor.getString(ArticleLoader.Query.BODY)));
+        loadImage(cursor.getString(ArticleLoader.Query.PHOTO_URL));
+    }
+
+    private void loadImage(String url) {
         Picasso.with(this)
-                .load(cursor.getString(ArticleLoader.Query.PHOTO_URL))
+                .load(url)
                 .fit()
                 .centerCrop()
                 .noPlaceholder()
-                .into(mImageView);
+                .into(mImageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Bitmap bitmap = ((BitmapDrawable) mImageView.getDrawable()).getBitmap();
+                        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                            public void onGenerated(Palette palette) {
+                                applyPalette(palette);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
+    }
+
+    private void applyPalette(Palette palette) {
+        int primaryDark = getResources().getColor(ViewUtils.getThemeAttribute(getTheme(), R.attr.colorPrimaryDark));
+        int primary = getResources().getColor(ViewUtils.getThemeAttribute(getTheme(), R.attr.colorPrimary));
+        mToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
+        mToolbarLayout.setStatusBarScrimColor(palette.getDarkMutedColor(primaryDark));
     }
 }
