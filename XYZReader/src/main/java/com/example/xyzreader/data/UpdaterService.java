@@ -25,10 +25,10 @@ import java.util.ArrayList;
 public class UpdaterService extends IntentService {
     private static final String TAG = "UpdaterService";
 
-    public static final String BROADCAST_ACTION_STATE_CHANGE
-            = "com.example.xyzreader.intent.action.STATE_CHANGE";
-    public static final String EXTRA_REFRESHING
-            = "com.example.xyzreader.intent.extra.REFRESHING";
+    public static final String BROADCAST_ACTION_STATE_CHANGE = "com.example.xyzreader.intent.action.STATE_CHANGE";
+    public static final String EXTRA_REFRESHING = "com.example.xyzreader.intent.extra.REFRESHING";
+    public static final String EXTRA_ERROR_OCCURRED = "com.example.xyzreader.intent.extra.EXTRA_ERROR_OCCURRED";
+    public static final String EXTRA_NO_INTERNET = "com.example.xyzreader.intent.extra.EXTRA_NO_INTERNET";
 
     public UpdaterService() {
         super(TAG);
@@ -42,6 +42,9 @@ public class UpdaterService extends IntentService {
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if (ni == null || !ni.isConnected()) {
             Log.w(TAG, "Not online, not refreshing.");
+            sendStickyBroadcast(
+                    new Intent(BROADCAST_ACTION_STATE_CHANGE).putExtra(EXTRA_REFRESHING, false)
+            .putExtra(EXTRA_NO_INTERNET, true));
             return;
         }
 
@@ -54,25 +57,25 @@ public class UpdaterService extends IntentService {
         Uri dirUri = ItemsContract.Items.buildDirUri();
 
         // Delete all items
-        cpo.add(ContentProviderOperation.newDelete(dirUri).build());
+        getContentResolver().delete(dirUri, null, null);
 
         try {
-            OkHttpClient client = ((XYZApplication)getApplication()).getOkHttpClient();
+            OkHttpClient client = ((XYZApplication) getApplication()).getOkHttpClient();
             JSONArray array = RemoteEndpointUtil.fetchJsonArray(client);
             if (array == null) {
-                throw new JSONException("Invalid parsed item array" );
+                throw new JSONException("Invalid parsed item array");
             }
 
             for (int i = 0; i < array.length(); i++) {
                 ContentValues values = new ContentValues();
                 JSONObject object = array.getJSONObject(i);
-                values.put(ItemsContract.Items.SERVER_ID, object.getString("id" ));
-                values.put(ItemsContract.Items.AUTHOR, object.getString("author" ));
-                values.put(ItemsContract.Items.TITLE, object.getString("title" ));
-                values.put(ItemsContract.Items.BODY, object.getString("body" ));
-                values.put(ItemsContract.Items.THUMB_URL, object.getString("thumb" ));
-                values.put(ItemsContract.Items.PHOTO_URL, object.getString("photo" ));
-                values.put(ItemsContract.Items.ASPECT_RATIO, object.getString("aspect_ratio" ));
+                values.put(ItemsContract.Items.SERVER_ID, object.getString("id"));
+                values.put(ItemsContract.Items.AUTHOR, object.getString("author"));
+                values.put(ItemsContract.Items.TITLE, object.getString("title"));
+                values.put(ItemsContract.Items.BODY, object.getString("body"));
+                values.put(ItemsContract.Items.THUMB_URL, object.getString("thumb"));
+                values.put(ItemsContract.Items.PHOTO_URL, object.getString("photo"));
+                values.put(ItemsContract.Items.ASPECT_RATIO, object.getString("aspect_ratio"));
                 time.parse3339(object.getString("published_date"));
                 values.put(ItemsContract.Items.PUBLISHED_DATE, time.toMillis(false));
                 cpo.add(ContentProviderOperation.newInsert(dirUri).withValues(values).build());
@@ -82,9 +85,13 @@ public class UpdaterService extends IntentService {
 
         } catch (JSONException | RemoteException | OperationApplicationException e) {
             Log.e(TAG, "Error updating content.", e);
+            sendStickyBroadcast(
+                    new Intent(BROADCAST_ACTION_STATE_CHANGE)
+                            .putExtra(EXTRA_REFRESHING, false)
+                            .putExtra(EXTRA_ERROR_OCCURRED, false));
         }
 
-        sendStickyBroadcast(
-                new Intent(BROADCAST_ACTION_STATE_CHANGE).putExtra(EXTRA_REFRESHING, false));
+        sendStickyBroadcast(new Intent(BROADCAST_ACTION_STATE_CHANGE).putExtra(EXTRA_REFRESHING, false)
+                .putExtra(EXTRA_ERROR_OCCURRED, true));
     }
 }

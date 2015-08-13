@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/emptyImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/rhythm_space_double"
+        tools:src="@drawable/error_illustration"/>
+
+    <TextView
+        android:id="@+id/emptyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/emptyImage"
+        android:textAppearance="?android:textAppearanceMedium"
+        tools:text="Oops, something went wrong"/>
+
+    <Button
+        android:id="@+id/emptyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/emptyText"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/rhythm_space_double"
+        android:theme="@style/AppTheme.EmptyView"
+        tools:text="Retry"/>
+</RelativeLayout>

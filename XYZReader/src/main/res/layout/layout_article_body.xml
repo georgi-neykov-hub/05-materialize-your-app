@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/rhythm_space_double">
+
+        <TextView
+            android:id="@+id/article_byline"
+            style="?android:attr/textAppearanceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:layout_marginBottom="@dimen/rhythm_space_double"
+            tools:text="20 Jun 2013 by Leonardo"/>
+
+        <TextView
+            android:id="@+id/article_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="@fraction/detail_body_line_spacing_multiplier"
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vel porta quam, non gravida leo. In dapibus tincidunt neque eget faucibus. Mauris ac gravida purus, id pretium velit. Phasellus nec porttitor urna, quis elementum ex. Pellentesque et erat neque. Quisque vel metus eros. Fusce id odio pretium, imperdiet risus sit amet, vehicula arcu. Nullam cursus mi volutpat ornare ullamcorper. Duis commodo sodales rutrum. Nulla mattis mi cursus purus porta, vel ultrices nunc posuere. Aliquam vel urna magna. Praesent at aliquam dolor, hendrerit placerat turpis. Nam egestas orci et sem consectetur mollis. Aliquam quis vehicula urna. Nam tincidunt dolor id facilisis pellentesque.
+
+Integer egestas, diam vel tempus elementum, eros tellus consectetur nulla, a pulvinar orci lectus in lorem. Sed consectetur vitae dolor rhoncus rutrum. Donec id porttitor diam. Aenean ut nunc nunc. Nullam iaculis efficitur est, at blandit elit eleifend ac. Fusce dapibus enim nisi, sed ullamcorper neque pellentesque ac. Pellentesque et elit a ante malesuada suscipit ac ut purus.
+
+Etiam eu quam molestie, consequat neque ac, blandit est. Maecenas ornare et arcu at euismod. Sed pulvinar scelerisque ipsum id euismod. Curabitur aliquam turpis ligula, ut egestas arcu dictum sed. Nulla cursus augue non commodo lobortis. Duis viverra, nulla ac vulputate maximus, tortor ipsum sodales est, eget viverra est ante sit amet urna. Curabitur viverra nibh a fringilla porttitor. Suspendisse vehicula, nisl eu malesuada luctus, orci nunc eleifend tellus, ut ultricies lorem ante in tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis consequat felis tempor, rhoncus dolor ac, aliquam dolor. Donec vitae orci augue. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean ultricies ullamcorper sapien et accumsan. Mauris faucibus odio sit amet eleifend rhoncus. Sed facilisis posuere iaculis. Etiam lacinia, metus sed viverra suscipit, turpis erat consectetur libero, eget luctus ipsum lacus eget massa."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColorLink="?colorAccent" />
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

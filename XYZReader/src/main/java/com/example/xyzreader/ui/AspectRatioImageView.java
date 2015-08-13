@@ -22,7 +22,7 @@ public class AspectRatioImageView extends NetworkImageView {
 
     public AspectRatioImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        if(attrs != null){
+        if (attrs != null) {
             readAttributeValues(context, attrs, defStyle);
         }
 
@@ -46,10 +46,10 @@ public class AspectRatioImageView extends NetworkImageView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        if(mAspectRatio != UNDEFINED_ASPECT_RATIO) {
+        if (mAspectRatio != UNDEFINED_ASPECT_RATIO) {
             int measuredWidth = getMeasuredWidth();
-            setMeasuredDimension(measuredWidth, (int) (measuredWidth / mAspectRatio));
-
+            int measuredHeight = (int) (measuredWidth / mAspectRatio);
+            setMeasuredDimension(measuredWidth, measuredHeight);
         }
     }
 }

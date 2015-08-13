@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-
-    app:cardElevation="4dp"
+    app:cardElevation="2dp"
     app:cardUseCompatPadding="true"
     app:contentPadding="0dp"
     android:clickable="true"
@@ -20,9 +19,9 @@
         <com.example.xyzreader.ui.AspectRatioImageView
             android:id="@+id/thumbnail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:widthToHeightRatio="1.6"
-            android:background="@drawable/photo_placeholder" />
+            android:layout_height="0dp"
+            app:widthToHeightRatio="1.5777"
+            tools:background="@drawable/photo_placeholder" />
 
         <include android:layout_width="match_parent"
             android:layout_height="wrap_content"

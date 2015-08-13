@@ -21,7 +21,7 @@ public class Constants {
 
     public static final URL BASE_URL;
 
-    public static final int OKHTTP_CACHE_SIZE_BYTES = 25 * 1024 *1024;
+    public static final int HTTP_CACHE_SIZE_BYTES = 25 * 1024 * 1024;
     public static final int HTTP_CONNECT_TIMEOUT_MS = 10*1000;
     public static final int HTTP_READOUT_TIMEOUT_MS = 20*1000;
     public static final int HTTP_WRITE_TIMEOUT_MS = 20*1000;

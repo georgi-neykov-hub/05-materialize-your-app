@@ -6,7 +6,7 @@
 
     <dimen name="fab_elevation">2dp</dimen>
     <dimen name="fab_press_translation_z">6dp</dimen>
-    <dimen name="fab_margin">24dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="rhythm_space_half">4dp</dimen>
     <dimen name="rhythm_space_single">8dp</dimen>
@@ -14,4 +14,8 @@
     <dimen name="elevation_ground">0dp</dimen>
     <dimen name="elevation_first_level">3dp</dimen>
     <dimen name="elevation_second_level">6dp</dimen>
+
+    <dimen name="detail_backdrop_height">256dp</dimen>
+    <dimen name="card_margin">16dp</dimen>
+    <dimen name="list_item_avatar_size">40dp</dimen>
 </resources>

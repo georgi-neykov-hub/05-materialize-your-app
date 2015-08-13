@@ -94,15 +94,14 @@ public class ArticleAdapter extends CursorAdapter<ArticleAdapter.ViewHolder> {
                             DateUtils.FORMAT_ABBREV_ALL).toString()
                             + " by "
                             + cursor.getString(ArticleLoader.Query.AUTHOR));
-            thumbnailView.setAspectRatio(cursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
             loadThumbnail(thumbnailView, cursor.getString(ArticleLoader.Query.THUMB_URL));
+            thumbnailView.setAspectRatio(cursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
         }
 
         private void loadThumbnail(ImageView view, String imageUrl) {
-            Picasso instance = Picasso.with(view.getContext().getApplicationContext());
-            instance.cancelRequest(view);
             if (imageUrl != null) {
-                instance.load(imageUrl)
+                Picasso.with(view.getContext())
+                        .load(imageUrl)
                         .fit()
                         .into(view);
             }
